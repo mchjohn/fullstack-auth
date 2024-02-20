@@ -9,7 +9,7 @@ export class AuthenticateUserController {
     const authenticateUserUseCase = new AuthenticateUserUseCase();
 
     const user = await authenticateUserUseCase.execute({
-      username,
+      username: username.trim(),
       password,
     });
 
