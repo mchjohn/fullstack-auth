@@ -1,6 +1,7 @@
 /** Módulo utilizado para obter um novo token a partir do refresh token armazenado no AsyncStorage. */
 import axios from 'axios';
 
+import { REFRESH_TOKEN_KEY, TOKEN_KEY } from '@/constants';
 import { storageService } from '@/services/storage/storageService';
 
 /** Instância criada para não precisar importar de src/api/index.ts e gerar um "dependency cycle" */
@@ -13,7 +14,7 @@ const _axiosInstance = axios.create({
 
 /** Pega o refresh token armazenado no AsyncStorage. */
 async function _getRefreshTokenFromStorage() {
-  const refresh_token = await storageService.getItem<string>('@app:refreshToken');
+  const refresh_token = await storageService.getItem<string>(REFRESH_TOKEN_KEY);
 
   if (!refresh_token) {
     throw new Error('Refresh token not found on storage');
@@ -39,7 +40,7 @@ async function _generateAccessTokenUsingRefreshToken(refresh_token: string) {
 
 /** Atualiza o valor do access token no AsyncStorage. */
 async function _updateAccessTokenOnStorage(accessToken: string) {
-  return storageService.setItem('@app:token', accessToken);
+  return storageService.setItem(TOKEN_KEY, accessToken);
 }
 
 /**
