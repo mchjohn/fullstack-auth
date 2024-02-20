@@ -11,14 +11,26 @@ type AuthStore = {
   signOut: () => void;
 }
 
+async function saveAuthData(user: User) {
+  storageService.setItem("@app:user", user)
+  storageService.setItem("@app:token", user.token)
+  storageService.setItem("@app:refreshToken", user.refreshToken)
+}
+
+async function cleanAuthData() {
+  storageService.removeItem("@app:user")
+  storageService.removeItem("@app:token")
+  storageService.removeItem("@app:refreshToken")
+}
+
 export const useAuthStore = create<AuthStore>((set) => ({
   user: null,
   isLoading: true,
-  setUser: (user) => {
+  setUser: async (user) => {
     set({ isLoading: true })
 
-    storageService.setItem("@app:user", user)
     set({ user })
+    await saveAuthData(user)
 
     set({ isLoading: false })
   },
@@ -31,11 +43,11 @@ export const useAuthStore = create<AuthStore>((set) => ({
 
     set({ isLoading: false })
   },
-  signOut: () => {
+  signOut: async () => {
     set({ isLoading: true })
 
-    storageService.removeItem("@app:user")
     set({ user: null })
+    await cleanAuthData()
 
     set({ isLoading: false })
   }
