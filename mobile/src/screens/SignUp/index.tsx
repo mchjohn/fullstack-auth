@@ -1,8 +1,9 @@
 import { useState } from "react";
 import { useNavigation } from "@react-navigation/native";
-import { View, TextInput, TouchableOpacity, StyleSheet, Text } from "react-native";
+import { View, TextInput, TouchableOpacity, StyleSheet, Text, ActivityIndicator } from "react-native";
 
 import { useSignUp } from "@/mutations/auth";
+import { useAuthStore } from "@/store/authStore";
 
 export function SignUp() {
   const { navigate } = useNavigation()
@@ -10,6 +11,7 @@ export function SignUp() {
   const [password, setPassword] = useState('')
 
   const { isSuccess, mutateAsync } = useSignUp()
+  const isLoading = useAuthStore(state => state.isLoading);
 
   const handleSignUp = async () => {
     await mutateAsync({ username, password })
@@ -39,11 +41,14 @@ export function SignUp() {
         onChangeText={setPassword}
       />
 
-      <TouchableOpacity style={styles.button} activeOpacity={0.7} onPress={handleSignUp}>
-        <Text style={styles.buttonText}>Sign up</Text>
+      <TouchableOpacity style={styles.button} activeOpacity={0.7} onPress={handleSignUp} disabled={isLoading}>
+        {isLoading ?
+          <ActivityIndicator color='#ffff' size='small' /> :
+          <Text style={styles.buttonText}>Sign up</Text>
+        }
       </TouchableOpacity>
 
-      <TouchableOpacity style={styles.linkButton} activeOpacity={0.7} onPress={handleGoToSignIn}>
+      <TouchableOpacity style={styles.linkButton} activeOpacity={0.7} onPress={handleGoToSignIn} disabled={isLoading}>
         <Text style={styles.linkButtonText}>Log in your account</Text>
       </TouchableOpacity>
     </View>
