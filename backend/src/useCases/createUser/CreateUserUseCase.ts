@@ -3,13 +3,12 @@ import { hash } from "bcryptjs";
 import { client } from "../../prisma/client"
 
 interface IUserRequest {
-    name: string;
     username: string;
     password: string;
 }
 
 export class CreateUserUseCase {
-    async execute({ name, username, password }: IUserRequest) {
+    async execute({ username, password }: IUserRequest) {
         const userAlreadyExists = await client.user.findFirst({
             where: {
                 username
@@ -24,7 +23,6 @@ export class CreateUserUseCase {
 
         const user = await client.user.create({
             data: {
-                name,
                 username,
                 password: passwordHash,
             }
