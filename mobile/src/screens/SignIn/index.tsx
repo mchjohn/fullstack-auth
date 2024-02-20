@@ -1,12 +1,24 @@
+import { useState } from "react";
 import { useNavigation } from "@react-navigation/native";
 import { View, TextInput, TouchableOpacity, StyleSheet, Text } from "react-native";
 
+import { useSignIn } from "@/mutations/auth";
+import { useAuthStore } from "@/store/authStore";
+
 export function SignIn() {
   const { navigate } = useNavigation()
+  const [username, setUsername] = useState('')
+  const [password, setPassword] = useState('')
 
-  const handleGoToSignUp = () => {
-    navigate('SignUp')
+  const setUser = useAuthStore(state => state.setUser);
+  const { mutateAsync } = useSignIn()
+
+  const handleSignIn = async () => {
+    const { user } = await mutateAsync({ username, password })
+    setUser(user)
   }
+
+  const handleGoToSignUp = () => { navigate('SignUp') }
 
   return (
     <View style={styles.container}>
@@ -17,14 +29,16 @@ export function SignIn() {
         style={styles.input}
         placeholder="User name"
         autoCapitalize="none"
+        onChangeText={setUsername}
       />
       <TextInput
         style={styles.input}
         placeholder="Password"
         secureTextEntry
+        onChangeText={setPassword}
       />
 
-      <TouchableOpacity style={styles.button} activeOpacity={0.7}>
+      <TouchableOpacity style={styles.button} activeOpacity={0.7} onPress={handleSignIn}>
         <Text style={styles.buttonText}>Sign in</Text>
       </TouchableOpacity>
 
