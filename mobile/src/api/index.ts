@@ -2,6 +2,9 @@ import axios from "axios";
 
 import { Courses, SignInData, SignInResponse, SignUpData } from "@/types";
 
+import { createInterceptorToHandleRefreshToken } from "./interceptors/refresh-token";
+import { createInterceptorToAddAccessTokenToHeader } from "./interceptors/token-in-header";
+
 const api = axios.create({
   baseURL: 'http://192.168.0.107:3000',
   // baseURL: 'http://localhost:3000',
@@ -29,6 +32,9 @@ async function getCourses() {
   const { data } = await api.get<Promise<Courses[]>>('/courses')
   return data;
 }
+
+createInterceptorToHandleRefreshToken(api);
+createInterceptorToAddAccessTokenToHeader(api);
 
 export {
   api,
