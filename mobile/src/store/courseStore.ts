@@ -1,20 +1,21 @@
 import { create } from "zustand";
 
 import { Courses } from "@/types";
-import { getCourses } from "@/queries/getCourses";
 
 type CourseStore = {
   courses: Courses[];
-  loadCourses: () => void;
+  isLoading: boolean;
+  loadCourses: (courses: Courses[]) => void;
 }
 
 export const useCourseStore = create<CourseStore>((set) => ({
   courses: [],
-  loadCourses: () => {
-    const { data } = getCourses();
+  isLoading: false,
+  loadCourses: (courses) => {
+    set({ isLoading: true });
 
-    if (data) {
-      set({ courses: data });
-    }
+    set({ courses });
+
+    set({ isLoading: false });
   }
 }));

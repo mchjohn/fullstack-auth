@@ -22,7 +22,7 @@ type SignUpData = {
 };
 
 type Courses = {
-  id: number;
+  id: string;
   name: string;
 }
 

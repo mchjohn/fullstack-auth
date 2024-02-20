@@ -8,6 +8,7 @@ type AuthStore = {
   isLoading: boolean;
   setUser: (user: User) => void;
   loadUser: () => void;
+  signOut: () => void;
 }
 
 export const useAuthStore = create<AuthStore>((set) => ({
@@ -27,6 +28,14 @@ export const useAuthStore = create<AuthStore>((set) => ({
     const user = await storageService.getItem<User>("@app:user")
 
     if (user) { set({ user }) }
+
+    set({ isLoading: false })
+  },
+  signOut: () => {
+    set({ isLoading: true })
+
+    storageService.removeItem("@app:user")
+    set({ user: null })
 
     set({ isLoading: false })
   }

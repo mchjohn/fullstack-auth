@@ -7,9 +7,7 @@ import { useNavigation } from "@react-navigation/native";
 export function useSignIn() {
   return useMutation({
     mutationFn: (data: SignInData) => signIn(data),
-    onError: (err: any) => {
-			console.error(err.response.data);
-		},
+    onError: (err: any) => { console.error(err.response.data); },
   });
 }
 

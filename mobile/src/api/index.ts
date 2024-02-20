@@ -1,6 +1,6 @@
 import axios from "axios";
 
-import { SignInData, SignInResponse, SignUpData } from "@/types";
+import { Courses, SignInData, SignInResponse, SignUpData } from "@/types";
 
 const api = axios.create({
   baseURL: 'http://192.168.0.107:3000',
@@ -25,9 +25,15 @@ async function refreshToken(refresh_token: string) {
   return data;
 }
 
+async function getCourses() {
+  const { data } = await api.get<Promise<Courses[]>>('/courses')
+  return data;
+}
+
 export {
   api,
   signUp,
   signIn,
   refreshToken,
+  getCourses,
 }
