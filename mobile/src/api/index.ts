@@ -29,12 +29,13 @@ async function refreshToken(refresh_token: string) {
 }
 
 async function getCourses() {
+  createInterceptorToHandleRefreshToken(api);
+  createInterceptorToAddAccessTokenToHeader(api);
+
   const { data } = await api.get<Promise<Courses[]>>('/courses')
   return data;
 }
 
-createInterceptorToHandleRefreshToken(api);
-createInterceptorToAddAccessTokenToHeader(api);
 
 export {
   api,

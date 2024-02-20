@@ -5,6 +5,7 @@ import { useCourses } from "@/queries/getCourses";
 
 import { useAuthStore } from "@/store/authStore";
 import { useCourseStore } from "@/store/courseStore";
+import { LoadingWithText } from "@/components/LoadingWithText";
 
 export function Home() {
   const { data, error, isLoading, refetch } = useCourses();
@@ -31,16 +32,19 @@ export function Home() {
       <Text style={styles.text}>ID: {user?.id}</Text>
       <Text style={styles.text}>Username: {user?.username}</Text>
 
-      {isLoading && <ActivityIndicator color='#000' size='large' />}
+      {isLoading && <LoadingWithText />}
 
       <FlatList
         data={courses}
+        style={{ marginTop: 32 }}
         keyExtractor={(item) => item.id}
         renderItem={({ item }) => (
-          <View>
+          <View style={styles.item}>
+            <Text style={styles.text}>{item.id}: </Text>
             <Text style={styles.text}>{item.name}</Text>
           </View>
         )}
+        ListHeaderComponent={<Text style={styles.title}>Cursos:</Text>}
         ListEmptyComponent={!isLoading ? <Text style={{ marginTop: 24, color: 'red' }}>{expiredToken}</Text> : null}
       />
     </View>
@@ -52,7 +56,12 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 20,
   },
+  item: {
+    alignItems: 'center',
+    flexDirection: 'row',
+  },
   title: {
+    marginBottom: 8,
     fontSize: 24,
     fontWeight: 'bold',
   },
