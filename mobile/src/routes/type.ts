@@ -8,3 +8,10 @@ export type RootAuthParamList = {
 }
 
 export type RootRoutes = RootStackParamList & RootAuthParamList
+
+
+declare global {
+  namespace ReactNavigation {
+    interface RootParamList extends RootRoutes { }
+  }
+}
