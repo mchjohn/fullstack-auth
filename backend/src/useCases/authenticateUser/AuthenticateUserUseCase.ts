@@ -40,6 +40,13 @@ export class AuthenticateUserUseCase {
         const genereateRefreshToken = new GenerateRefreshTokenProvider();
         const refreshToken = await genereateRefreshToken.execute(userAlreadyExists.id)
 
-        return { token, refreshToken }
+        const user = {
+            id: userAlreadyExists.id,
+            username: userAlreadyExists.username,
+            token,
+            refreshToken,
+        }
+
+        return { user }
     }
 }
